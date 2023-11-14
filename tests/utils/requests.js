@@ -10,12 +10,13 @@ export async function request(context, method, path, body = undefined, auth = tr
     const headers = customHeaders ? customHeaders : {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        ...(auth && {'Authorization': `Bearer ${config[global.env].token}`})
+        'x-api-key': config[global.env].apiKey,
+        ...(auth && {'Authorization': `Bearer ${global.executionVariables['token']}`})
     }
 
     let response = null
     let responseBody
-
+    
     switch (method) {
         case 'GET':
             response = await requestST.get(path).set(headers)
@@ -115,7 +116,7 @@ export async function request(context, method, path, body = undefined, auth = tr
         default:
             console.log('not valid request method provided')
     }
-
+    
     return response
 }
 
