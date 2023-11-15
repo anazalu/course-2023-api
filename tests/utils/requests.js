@@ -35,6 +35,7 @@ export async function request(context, method, path, body = undefined, auth = tr
             if (asserts.executionVariables) {
                 await setExecutionVariables(responseBody, asserts.executionVariables)
             }
+            console.log(responseBody)
 
             break
         case 'POST':

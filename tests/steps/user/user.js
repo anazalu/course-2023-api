@@ -1,5 +1,5 @@
 import { request } from '../../utils/requests.js'
-import { getCreateUserRequestBody, getLoginUserRequestBody } from '../../utils/requestBodyGenerator/user.js'
+import { getCreateUserRequestBody, getLoginUserRequestBody, getCreateUserWithoutPasswordRequestBody, getCreateUserWithoutEmailRequestBody } from '../../utils/requestBodyGenerator/user.js'
 import { config } from '../../../config.js'
 
 export async function createUser() {
@@ -41,6 +41,34 @@ export async function deleteUser() {
         await request(this, 'DELETE', '/user', undefined, true, 
             {
                 statusCode : 200
+            }
+        )
+    })
+}
+
+export async function negativeCreateUserWithoutPassword() {
+    it('Create user account without password', async function () {
+        const requestBody = await getCreateUserWithoutPasswordRequestBody()
+        await request(this, 'POST', '/user', requestBody, false, 
+            {
+                statusCode : 400,
+                expectedValues: [
+                                    {path: 'message', value: 'Password not provided'}
+                                ]
+            }
+        )
+    })
+}
+
+export async function negativeCreateUserWithoutEmail() {
+    it('Create user account without email', async function () {
+        const requestBody = await getCreateUserWithoutEmailRequestBody()
+        await request(this, 'POST', '/user', requestBody, false, 
+            {
+                statusCode : 400,
+                expectedValues: [
+                                    {path: 'message', value: 'User validation failed: email: Path `email` is required.'}
+                                ]
             }
         )
     })

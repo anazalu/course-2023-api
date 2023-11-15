@@ -25,3 +25,24 @@ export async function getLoginUserRequestBody() {
 
     return loginRequestBody
 }
+
+export async function getCreateUserWithoutPasswordRequestBody() {
+    accountRequestBody.name = config[global.env].name
+    accountRequestBody.surname = config[global.env].surname
+    accountRequestBody.email = await generateRandomEmail()
+
+    delete accountRequestBody.password
+    
+    return accountRequestBody
+}
+
+export async function getCreateUserWithoutEmailRequestBody() {
+    accountRequestBody.name = config[global.env].name
+    accountRequestBody.surname = config[global.env].surname
+    accountRequestBody.password = await generateRandomPassword()
+    
+    delete accountRequestBody.email
+    
+    return accountRequestBody
+}
+
