@@ -1,9 +1,9 @@
 import { request } from '../../utils/requests.js'
-import { getCreateRestaurantRequestBody } from '../../utils/requestBodyGenerator/restaurant.js'
+import { getCreateOrUpdateRestaurantRequestBody } from '../../utils/requestBodyGenerator/restaurant.js'
 
 export async function createRestaurant() {
     it('Create restaurant', async function () {
-        const requestBody = await getCreateRestaurantRequestBody()
+        const requestBody = await getCreateOrUpdateRestaurantRequestBody()
         await request(this, 'POST', '/restaurants', requestBody, true, 
             {
                 statusCode : 201,
@@ -46,6 +46,40 @@ export async function getRestaurant() {
                     {path: 'description', value: global.executionVariables['restaurantDescription']}
                 ],
                 expectedFields: ['user']
+            }
+        )
+    })
+}
+
+export async function updateRestaurant() {
+    it('Update restaurant', async function () {
+        const requestBody = await getCreateOrUpdateRestaurantRequestBody()
+        await request(this, 'PATCH', `/restaurants/${global.executionVariables['restaurantId']}`, requestBody, true, 
+            {
+                statusCode : 200,
+                expectedFields: ['_id', 'user'],
+                expectedValues: [
+                                    {path: 'name', value: requestBody.name},
+                                    {path: 'description', value: requestBody.description}
+                                ],
+                expectedTypes: [
+                    {
+                        path: '_id', type: 'string'
+                    }
+                ]
+            }
+        )
+    })
+}
+
+export async function negativeCreateRestaurant(requestBody, testCaseName, asserts) {
+    it(`Create restaurant ${testCaseName}`, async function () {
+        await request(this, 'POST', '/restaurants', requestBody, true, 
+            {
+                statusCode : 400,
+                expectedValues: [
+                    {path: asserts.path, value: asserts.value}
+                ]
             }
         )
     })

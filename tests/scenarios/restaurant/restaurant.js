@@ -1,18 +1,31 @@
-import { createUser, loginUser, deleteUser } from '../../steps/user/user.js'
-import { createRestaurant, deleteRestaurant, getRestaurant } from '../../steps/restaurant/restaurant.js'
+import { createUser, loginUser, deleteUserRequest } from '../../steps/user/user.js'
+import { createRestaurant, deleteRestaurant, getRestaurant, updateRestaurant, negativeCreateRestaurant } from '../../steps/restaurant/restaurant.js'
 import { generateTestData } from '../../utils/helpers.js'
+import negativeScenariosData from '../../data/restaurant/create_negative.json' assert { type: 'json' }
 
 before(async () => {
     await generateTestData()
+    createUser()
+    loginUser()
 })
 
-it('Restaurant', () => {
+after(async () => {
+    await deleteUserRequest()
+})
+
+describe('Restaurant', () => {
     describe(`CRUD Restaurant`, () => {
-        createUser()
-        loginUser()
         createRestaurant()
         getRestaurant()
+        updateRestaurant()
+        getRestaurant()
         deleteRestaurant()
-        deleteUser()
-    })
+    }) 
+       
+
+    describe(`Restaurant negative scenarios`, () => {
+        for (const negativeScenarioData of negativeScenariosData) {
+            negativeCreateRestaurant(negativeScenarioData.requestBody, negativeScenarioData.name, negativeScenarioData.asserts)
+        }
+    }) 
 })

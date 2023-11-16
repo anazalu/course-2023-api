@@ -1,0 +1,22 @@
+[
+    {
+        "requestBody": {
+            "name": "testName"
+        },
+        "name": "without description",
+        "asserts": {
+            "path": "message",
+            "value": "Restaurant validation failed: description: Path `description` is required."
+        }
+    },
+    {
+        "requestBody": {
+            "description": "testName"
+        },
+        "name": "without name",
+        "asserts": {
+            "path": "message",
+            "value": "Restaurant validation failed: name: Path `name` is required."
+        }
+    }
+]

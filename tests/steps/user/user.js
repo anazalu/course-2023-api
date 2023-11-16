@@ -36,13 +36,17 @@ export async function loginUser() {
     })
 }
 
+export async function deleteUserRequest() {
+    await request(this, 'DELETE', '/user', undefined, true, 
+        {
+            statusCode : 200
+        }
+    )
+}
+
 export async function deleteUser() {
     it('Remove user account', async function () {
-        await request(this, 'DELETE', '/user', undefined, true, 
-            {
-                statusCode : 200
-            }
-        )
+        await deleteUserRequest()
     })
 }
 

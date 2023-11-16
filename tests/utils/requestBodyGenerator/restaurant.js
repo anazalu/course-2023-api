@@ -1,7 +1,7 @@
 import restaurantRequestBody from '../../data/restaurant/create_restaurant.json' assert { type: 'json' }
 import { generateRandomPassword } from '../helpers.js'
 
-export async function getCreateRestaurantRequestBody() {
+export async function getCreateOrUpdateRestaurantRequestBody() {
 
     const name = await generateRandomPassword()
     const description = await generateRandomPassword()

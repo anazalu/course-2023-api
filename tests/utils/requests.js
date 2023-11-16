@@ -31,11 +31,14 @@ export async function request(context, method, path, body = undefined, auth = tr
             if (asserts.expectedValues) {
                 await validateExpectedValues(responseBody, asserts.expectedValues, context, method, path, headers, response)
             }
+              
+            if (asserts.expectedTypes) {
+                await validateExpectedTypes(responseBody, asserts.expectedTypes, context, method, path, headers, response)
+            }
 
             if (asserts.executionVariables) {
                 await setExecutionVariables(responseBody, asserts.executionVariables)
             }
-            console.log(responseBody)
 
             break
         case 'POST':
@@ -50,6 +53,10 @@ export async function request(context, method, path, body = undefined, auth = tr
 
             if (asserts.expectedValues) {
                 await validateExpectedValues(responseBody, asserts.expectedValues, context, method, path, headers, response, body)
+            }
+
+            if (asserts.expectedTypes) {
+                await validateExpectedTypes(responseBody, asserts.expectedTypes, context, method, path, headers, response, body)
             }
 
             if (asserts.executionVariables) {
@@ -71,6 +78,10 @@ export async function request(context, method, path, body = undefined, auth = tr
                 await validateExpectedValues(responseBody, asserts.expectedValues, context, method, path, headers, response, body)
             }
 
+            if (asserts.expectedTypes) {
+                await validateExpectedTypes(responseBody, asserts.expectedTypes, context, method, path, headers, response, body)
+            }
+
             if (asserts.executionVariables) {
                 await setExecutionVariables(responseBody, asserts.executionVariables)
             }
@@ -90,6 +101,10 @@ export async function request(context, method, path, body = undefined, auth = tr
                 await validateExpectedValues(responseBody, asserts.expectedValues, context, method, path, headers, response, body)
             }
 
+            if (asserts.expectedTypes) {
+                await validateExpectedTypes(responseBody, asserts.expectedTypes, context, method, path, headers, response, body)
+            }
+
             if (asserts.executionVariables) {
                 await setExecutionVariables(responseBody, asserts.executionVariables)
             }
@@ -107,6 +122,10 @@ export async function request(context, method, path, body = undefined, auth = tr
 
             if (asserts.expectedValues) {
                 await validateExpectedValues(responseBody, asserts.expectedValues, context, method, path, headers, response, body)
+            }
+
+            if (asserts.expectedTypes) {
+                await validateExpectedTypes(responseBody, asserts.expectedTypes, context, method, path, headers, response, body)
             }
 
             if (asserts.executionVariables) {
@@ -137,6 +156,30 @@ async function validateFieldsExists(body, fields, context, method, path, headers
         } catch (error) {
             addRequestInfoToReport(context, method, path, headers, response, requestBody)
             assert.fail(error.actual, error.expected, `${field} field is not present in body`)
+        }
+    })
+}
+
+async function validateExpectedTypes(body, fields, context, method, path, headers, response, requestBody) {  
+    fields.forEach(field => {
+        try {
+            switch(field.type.toLowerCase()) {
+                case 'number':
+                    expect(getNestedValue(field.path, body)).to.be.a('number')
+                    break
+                case 'string':
+                    expect(getNestedValue(field.path, body)).to.be.a('string')
+                    break
+                case 'boolean':
+                    expect(getNestedValue(field.path, body)).to.be.a('boolean')
+                    break
+                default:
+                    console.log('not valid data type for assertion')
+            }
+        } catch (error) {
+            addRequestInfoToReport(context, method, path, headers, response, requestBody)
+            const actual = getNestedValue(field.path, body)
+            assert.fail(actual, field.type, `Expected type was ${field.type}, but received ${actual}`)
         }
     })
 }
