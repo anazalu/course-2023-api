@@ -6,7 +6,10 @@
   "author": "Aleksejs Levenciks",
   "license": "ISC",
   "scripts": {
-    "user": "mocha 'tests/scenarios/user/crud.js' --reporter mochawesome --timeout 20000"
+    "user": "mocha 'tests/scenarios/user/crud.js' --reporter mochawesome --timeout 20000",
+    "user-negative": "mocha 'tests/scenarios/user/negative.js' --reporter mochawesome --timeout 20000",
+    "restaurant": "mocha 'tests/scenarios/restaurant/restaurant.js' --reporter mochawesome --timeout 20000",
+    "meal": "mocha 'tests/scenarios/meal/meal.js' --reporter mochawesome --timeout 20000"
   },
   "devDependencies": {
     "chai": "^4.3.7",
@@ -14,6 +17,7 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "get-nested-value": "^1.0.3",
     "mochawesome": "^6.2.0"
   },

@@ -1,0 +1,22 @@
+[
+    {
+        "requestBody": {
+            "name": "Test name"
+        },
+        "asserts": [
+            {"path": "message", "value": "Restaurant validation failed: description: Path `description` is required."}
+        ],
+        "statusCode": 400,
+        "testCaseName": "Create restaurant without description"
+    },
+    {
+        "requestBody": {
+            "description": "Test description"
+        },
+        "asserts": [
+            {"path": "message", "value": "Restaurant validation failed: name: Path `name` is required."}
+        ],
+        "statusCode": 400,
+        "testCaseName": "Create restaurant without name"
+    }
+]
